@@ -33,7 +33,7 @@ docker-down:
 # Test the application
 test:
 	@echo "Testing..."
-	@go test ./tests -v
+	@APP_ENV=test go test ./tests -v
 
 # Clean the binary
 clean:
