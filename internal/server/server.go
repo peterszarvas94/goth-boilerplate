@@ -3,12 +3,13 @@ package server
 import (
 	"fmt"
 	"net/http"
-	"os"
 	"strconv"
 	"time"
 
-	_ "github.com/joho/godotenv/autoload"
+	"goth/internal/config"
 	"goth/internal/database"
+
+	_ "github.com/joho/godotenv/autoload"
 )
 
 type Server struct {
@@ -16,12 +17,19 @@ type Server struct {
 	db   database.Service
 }
 
-func NewServer() *http.Server {
-	port, _ := strconv.Atoi(os.Getenv("PORT"))
+func NewServer() (*http.Server, error) {
+	port, err := strconv.Atoi(config.App.PORT)
+	if err != nil {
+		return nil, err
+	}
+
 	NewServer := &Server{
 		port: port,
 		db:   database.New(),
 	}
+
+	// seed the database
+	NewServer.db.Seed()
 
 	// Declare Server config
 	server := &http.Server{
@@ -32,5 +40,5 @@ func NewServer() *http.Server {
 		WriteTimeout: 30 * time.Second,
 	}
 
-	return server
+	return server, nil
 }
