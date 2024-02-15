@@ -27,3 +27,6 @@ tmp/
 
 # binary
 main
+
+# logs
+logs/

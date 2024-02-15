@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"goth/internal/server"
+	"goth/internal/slogger"
 )
 
 func main() {
@@ -10,6 +11,8 @@ func main() {
 	if err != nil {
 		panic(fmt.Sprintf("cannot create server: %s", err))
 	}
+
+	slogger.Log.Info("Server started")
 
 	err = server.ListenAndServe()
 	if err != nil {

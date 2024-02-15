@@ -5,7 +5,7 @@ import (
 	"database/sql"
 	"fmt"
 	"goth/internal/config"
-	"log"
+	"goth/internal/slogger"
 	"time"
 
 	_ "github.com/go-sql-driver/mysql"
@@ -36,7 +36,7 @@ func New() Service {
 	if err != nil {
 		// This will not be a connection error, but a DSN parse error or
 		// another initialization error.
-		log.Fatal(err)
+		slogger.Log.Fatal(err.Error())
 	}
 	db.SetConnMaxLifetime(0)
 	db.SetMaxIdleConns(50)
@@ -52,7 +52,8 @@ func (s *service) Health() map[string]string {
 
 	err := s.db.PingContext(ctx)
 	if err != nil {
-		log.Fatalf(fmt.Sprintf("db down: %v", err))
+		// log.Fatalf(fmt.Sprintf("db down: %v", err))
+		slogger.Log.Fatal(fmt.Sprintf("db down: %v", err))
 	}
 
 	return map[string]string{
@@ -69,13 +70,15 @@ func (s *service) Seed() {
 		ctx, "CREATE TABLE IF NOT EXISTS users (id INT AUTO_INCREMENT PRIMARY KEY, email VARCHAR(255), password VARCHAR(255))",
 	)
 	if err != nil {
-		log.Fatalf(fmt.Sprintf("db down: %v", err))
+		// log.Fatalf(fmt.Sprintf("db down: %v", err))
+		slogger.Log.Fatal(fmt.Sprintf("db down: %v", err))
 	}
 
 	// delete all records
 	_, err = s.db.ExecContext(ctx, "DELETE FROM users")
 	if err != nil {
-		log.Fatalf(fmt.Sprintf("db down: %v", err))
+		// log.Fatalf(fmt.Sprintf("db down: %v", err))
+		slogger.Log.Fatal(err.Error())
 	}
 
 	// seed the database
@@ -84,7 +87,7 @@ func (s *service) Seed() {
 		"seededuser@example.com", "password123",
 	)
 	if err != nil {
-		log.Fatalf(fmt.Sprintf("db down: %v", err))
+		slogger.Log.Fatal(fmt.Sprintf("db down: %v", err))
 	}
 }
 
@@ -94,7 +97,7 @@ func (s *service) GetUsers() map[int]string {
 
 	rows, err := s.db.QueryContext(ctx, "SELECT * FROM users")
 	if err != nil {
-		log.Fatalf(fmt.Sprintf("db down: %v", err))
+		slogger.Log.Fatal(fmt.Sprintf("db down: %v", err))
 	}
 
 	users := make(map[int]string)
@@ -105,7 +108,7 @@ func (s *service) GetUsers() map[int]string {
 		var email, password string
 		err := rows.Scan(&id, &email, &password)
 		if err != nil {
-			log.Fatalf(fmt.Sprintf("db down: %v", err))
+			slogger.Log.Fatal(fmt.Sprintf("db down: %v", err))
 		}
 		users[id] = email
 	}

@@ -2,7 +2,8 @@ package server
 
 import (
 	"encoding/json"
-	"log"
+	"fmt"
+	"goth/internal/slogger"
 	"net/http"
 )
 
@@ -21,7 +22,7 @@ func (s *Server) HelloWorldHandler(w http.ResponseWriter, r *http.Request) {
 
 	jsonResp, err := json.Marshal(resp)
 	if err != nil {
-		log.Fatalf("error handling JSON marshal. Err: %v", err)
+		slogger.Log.Fatal(fmt.Sprintf("error handling JSON marshal. Err: %v", err))
 	}
 
 	_, _ = w.Write(jsonResp)
@@ -31,7 +32,7 @@ func (s *Server) healthHandler(w http.ResponseWriter, r *http.Request) {
 	jsonResp, err := json.Marshal(s.db.Health())
 
 	if err != nil {
-		log.Fatalf("error handling JSON marshal. Err: %v", err)
+		slogger.Log.Fatal(fmt.Sprintf("error handling JSON marshal. Err: %v", err))
 	}
 
 	_, _ = w.Write(jsonResp)
@@ -41,7 +42,7 @@ func (s *Server) getUsersHandler(w http.ResponseWriter, r *http.Request) {
 	jsonResp, err := json.Marshal(s.db.GetUsers())
 
 	if err != nil {
-		log.Fatalf("error handling JSON marshal. Err: %v", err)
+		slogger.Log.Fatal(fmt.Sprintf("error handling JSON marshal. Err: %v", err))
 	}
 
 	_, _ = w.Write(jsonResp)
