@@ -4,7 +4,10 @@ import (
 	"encoding/json"
 	"fmt"
 	"goth/internal/slogger"
+	"goth/web/templates/pages"
 	"net/http"
+
+	"github.com/a-h/templ"
 )
 
 func (s *Server) RegisterRoutes() http.Handler {
@@ -17,15 +20,9 @@ func (s *Server) RegisterRoutes() http.Handler {
 }
 
 func (s *Server) HelloWorldHandler(w http.ResponseWriter, r *http.Request) {
-	resp := make(map[string]string)
-	resp["message"] = "Hello World"
-
-	jsonResp, err := json.Marshal(resp)
-	if err != nil {
-		slogger.Log.Fatal(fmt.Sprintf("error handling JSON marshal. Err: %v", err))
-	}
-
-	_, _ = w.Write(jsonResp)
+	component := pages.Index();
+	handler := templ.Handler(component);
+	handler.ServeHTTP(w, r);
 }
 
 func (s *Server) healthHandler(w http.ResponseWriter, r *http.Request) {

@@ -24,15 +24,16 @@ var App config
 func init() {
 	var app config
 
-	// Check APP_ENV before other env vars
-	// This is mandatory so we don't get any errors in tests
+	// Check APP_ENV before other env vars.
+	// This is mandatory to set for the app.
 	appEnv, ok := os.LookupEnv("APP_ENV")
 	if !ok || appEnv == "" {
 		fmt.Println("APP_ENV is not set")
 		os.Exit(1)
 	}
 
-	// Check if we are in a test environment
+	// Check if we are in a test environment, return so we don't get errors in
+	// tests because of missing environment variables.
 	if appEnv == "test" {
 		return
 	}

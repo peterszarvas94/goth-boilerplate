@@ -1,0 +1,15 @@
+package pages;
+
+import "goth/web/templates/layouts"
+
+templ NotFound() {
+	@layouts.Base(layouts.BaseProps{
+		Title:       "404",
+		Description: "Page not found",
+	}) {
+		<div class="flex flex-col gap-2">
+			<h1 class="font-bold">404</h1>
+			<p>The page you are looking for does not exist.</p>
+		</div>
+	}
+}

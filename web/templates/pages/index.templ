@@ -1,0 +1,17 @@
+package pages
+
+import (
+	"goth/web/templates/layouts"
+)
+
+templ Index() {
+	@layouts.Base(layouts.BaseProps{
+		Title: "Index",
+		Description: "Welcome to the index page!",
+	}) {
+		<div>
+			<h1 class="text-4xl">Index</h1>
+			<p>Welcome to the index page!</p>
+		</div>
+	}
+}

@@ -5,8 +5,7 @@ all: build
 
 build:
 	@echo "Building..."
-	
-	@go build -o main cmd/api/main.go
+	@templ generate && go build -o ./tmp/main ./cmd/api/main.go
 
 # Run the application
 run:
@@ -30,10 +29,20 @@ docker-down:
 		docker-compose down; \
 	fi
 
+# Generate templates
+templ:
+	@echo "Generating templates..."
+	@templ generate
+
+# Generate Tailwind CS
+tailwind:
+	@echo "Watching tailwind classes..."
+	@tailwindcss -i tailwind.base.css -o web/static/tailwind.css --watch
+
 # Test the application
 test:
 	@echo "Testing..."
-	@APP_ENV=test go test ./tests -v
+	@APP_ENV=test go test tests/*_test.go -v
 
 # Clean the binary
 clean:

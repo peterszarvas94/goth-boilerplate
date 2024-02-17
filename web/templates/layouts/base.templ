@@ -1,0 +1,19 @@
+package layouts
+
+type BaseProps struct {
+	Title       string
+	Description string
+}
+
+templ Base(props BaseProps) {
+	<html lang="en">
+		<head>
+			<title>{ props.Title }</title>
+			<script src="https://unpkg.com/htmx.org@1.9.10"></script>
+			<meta name="description" content={ props.Description }/>
+		</head>
+		<body>
+			{ children... }
+		</body>
+	</html>
+}
