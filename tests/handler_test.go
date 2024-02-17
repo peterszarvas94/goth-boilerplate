@@ -2,6 +2,7 @@ package tests
 
 import (
 	"goth/internal/server"
+	"goth/internal/server/handlers"
 	"io"
 	"net/http"
 	"net/http/httptest"
@@ -10,7 +11,7 @@ import (
 
 func TestHandler(t *testing.T) {
 	s := &server.Server{}
-	server := httptest.NewServer(http.HandlerFunc(s.HelloWorldHandler))
+	server := httptest.NewServer(http.HandlerFunc(handlers.HelloWorldHandler))
 	defer server.Close()
 	resp, err := http.Get(server.URL)
 	if err != nil {

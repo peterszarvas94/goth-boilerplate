@@ -96,18 +96,18 @@ func newJSONHandler(w io.Writer, level slog.Level) slog.Handler {
 		Level:     level,
 		AddSource: true,
 		// search the custom log level name, like "FATAL" in this case
-		ReplaceAttr: func(groups []string, a slog.Attr) slog.Attr {
-			if a.Key == slog.LevelKey {
-				level := a.Value.Any().(slog.Level)
+		ReplaceAttr: func(groups []string, attr slog.Attr) slog.Attr {
+			if attr.Key == slog.LevelKey {
+				level := attr.Value.Any().(slog.Level)
 				levelLabel, exists := levelNames[level]
 				if !exists {
 					levelLabel = level.String()
 				}
 
-				a.Value = slog.StringValue(levelLabel)
+				attr.Value = slog.StringValue(levelLabel)
 			}
 
-			return a
+			return attr
 		},
 	})
 }
