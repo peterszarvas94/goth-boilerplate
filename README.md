@@ -1,6 +1,10 @@
 # Project goth
 
-One Paragraph of project description goes here
+Go
+
+Templ
+
+HTMX
 
 ## Getting Started
 
