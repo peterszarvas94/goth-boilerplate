@@ -7,7 +7,6 @@ import (
 	"goth/internal/config"
 	"goth/internal/database/schema"
 	"goth/internal/slogger"
-	"goth/internal/uuid"
 	"time"
 
 	_ "github.com/go-sql-driver/mysql"
