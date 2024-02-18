@@ -6,7 +6,7 @@ import (
 	"net/http"
 )
 
-func (s *Server) RegisterRoutes() http.Handler {
+func RegisterRoutes() http.Handler {
 	mux := http.NewServeMux()
 	mux.HandleFunc("/", h.NotFoundHandler)
 	mux.HandleFunc("GET /{$}", h.HelloWorldHandler)

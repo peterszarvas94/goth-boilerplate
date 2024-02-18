@@ -31,9 +31,7 @@ var levelNames = map[slog.Leveler]string{
 
 var LogLevelFlag string
 
-var Log = newLogger()
-
-func newLogger() logger {
+func Get() logger {
 	var minLevel slog.Level
 
 	switch strings.ToUpper(LogLevelFlag) {
