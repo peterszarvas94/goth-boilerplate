@@ -11,31 +11,13 @@ build:
 run:
 	@go run cmd/api/main.go
 
-# Create DB container
-# docker-run:
-# 	@if docker compose up 2>/dev/null; then \
-# 		: ; \
-# 	else \
-# 		echo "Falling back to Docker Compose V1"; \
-# 		docker-compose up; \
-# 	fi
-
-# Shutdown DB container
-# docker-down:
-# 	@if docker compose down 2>/dev/null; then \
-# 		: ; \
-# 	else \
-# 		echo "Falling back to Docker Compose V1"; \
-# 		docker-compose down; \
-# 	fi
-
 # Generate templates
 templ:
 	@echo "Generating templates..."
 	@templ generate --watch
 
 # Generate Tailwind CS
-tailwind:
+tw:
 	@echo "Watching tailwind classes..."
 	@tailwindcss -i tailwind.base.css -o web/static/styles.css --watch
 
