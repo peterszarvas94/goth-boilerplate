@@ -1,30 +1,37 @@
 package schema
 
 type User struct {
-	ID        string `json:"id"`
-	Username  string `json:"username"`
-	Email     string `json:"email"`
-	Password  string `json:"-"` // don't return password in JSON
+	Id       string `json:"id"`
+	Username string `json:"username"`
+	Email    string `json:"email"`
+	// Password  string `json:"-"` // don't expose password in API
 	CreatedAt string `json:"created_at"`
 	UpdatedAt string `json:"updated_at"`
 }
 
-var CreateUserTableSchema = `
+var UserTableSchemaCreate = `
 CREATE TABLE IF NOT EXISTS users (
-	id VARCHAR(36) PRIMARY KEY,
-	username VARCHAR(255) NOT NULL,
-	email VARCHAR(255) NOT NULL,
-	password VARCHAR(255) NOT NULL,
+	id TEXT PRIMARY KEY,
+	username TEXT NOT NULL,
+	email TEXT NOT NULL,
+	password TEXT NOT NULL,
 	created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-	updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+	updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 `
 
-var DropUserTableSchema = `
+var UserTableSchemaDrop = `
 DROP TABLE IF EXISTS users;
 `
 
-var CreateUserSchema = `
+type UserPropsSignup struct {
+	Id       string
+	Username string
+	Email    string
+	Password string
+}
+
+var UserSchemaSignup = `
 INSERT INTO users (
 	id, username, email, password
 ) VALUES (
@@ -32,24 +39,43 @@ INSERT INTO users (
 );
 `
 
-var GetUserSchema = `
-SELECT id, username, email, password, created_at, updated_at
+type UserPropsSignin struct {
+	UsernameOrEmail string
+	Password        string
+}
+
+var UserSchemaSignin = `
+SELECT id, username, email, created_at, updated_at
+FROM users
+WHERE (username = ? OR email = ?) AND password = ?;
+`
+
+var UserSchemaGetByID = `
+SELECT id, username, email, created_at, updated_at
 FROM users
 WHERE id = ?;
 `
 
-var GetUsersSchema = `
-SELECT id, username, email, password, created_at, updated_at
+type UserPropsGetAll struct {
+	Id        string `json:"id"`
+	Username  string `json:"username"`
+	Email     string `json:"email"`
+	CreatedAt string `json:"created_at"`
+	UpdatedAt string `json:"updated_at"`
+}
+
+var UserSchemaGetAll = `
+SELECT id, username, email, created_at, updated_at
 FROM users;
 `
 
-var UpdateUserSchema = `
+var UserSchemaUpdate = `
 UPDATE users
 SET username = ?, email = ?, password = ?
 WHERE id = ?;
 `
 
-var DeleteUserSchema = `
+var UserSchemaDelete = `
 DELETE FROM users
 WHERE id = ?;
 `

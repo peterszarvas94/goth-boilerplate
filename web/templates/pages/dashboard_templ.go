@@ -15,7 +15,7 @@ import (
 	"goth/web/templates/layouts"
 )
 
-func Index() templ.Component {
+func Dashboard() templ.Component {
 	return templ.ComponentFunc(func(ctx context.Context, templ_7745c5c3_W io.Writer) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templ_7745c5c3_W.(*bytes.Buffer)
 		if !templ_7745c5c3_IsBuffer {
@@ -39,7 +39,7 @@ func Index() templ.Component {
 				return templ_7745c5c3_Err
 			}
 			templ_7745c5c3_Err = c.Header1(c.Header1Props{
-				Text: "Welcome",
+				Text: "Dashboard",
 			}).Render(ctx, templ_7745c5c3_Buffer)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
@@ -51,7 +51,7 @@ func Index() templ.Component {
 					defer templ.ReleaseBuffer(templ_7745c5c3_Buffer)
 				}
 				templ_7745c5c3_Err = c.Paragraph(c.ParagraphProps{
-					Text: "\"Perfection is achieved, not when there is nothing more to add, but when there is nothing left to take away.\" ― Antoine de Saint-Exupéry, Airman's Odyssey",
+					Text: "\"It is a shame for a man to grow old without seeing the beauty and strength of which his body is capable.\" - Socrates",
 				}).Render(ctx, templ_7745c5c3_Buffer)
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
@@ -62,8 +62,7 @@ func Index() templ.Component {
 				}
 				templ_7745c5c3_Err = c.Nav(c.NavProps{
 					Links: []c.Link{
-						{Text: "Sign up", Url: "/signup"},
-						{Text: "Sign in", Url: "/signin"},
+						{Text: "Home", Url: "/"},
 					},
 				}).Render(ctx, templ_7745c5c3_Buffer)
 				if templ_7745c5c3_Err != nil {
@@ -88,8 +87,8 @@ func Index() templ.Component {
 			return templ_7745c5c3_Err
 		})
 		templ_7745c5c3_Err = layouts.Base(layouts.BaseProps{
-			Title:       "Index",
-			Description: "Welcome to the index page!",
+			Title:       "Dashboard",
+			Description: "Welcome to the dashboard page!",
 		}).Render(templ.WithChildren(ctx, templ_7745c5c3_Var2), templ_7745c5c3_Buffer)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err

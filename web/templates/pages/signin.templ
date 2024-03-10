@@ -1,0 +1,53 @@
+package pages
+
+import (
+	"goth/web/templates/layouts"
+	c "goth/web/templates/components"
+)
+
+templ Signin() {
+	@layouts.Base(layouts.BaseProps{
+		Title:       "Signin",
+		Description: "Sigin to the app.",
+	}) {
+		@c.Header1(c.Header1Props{
+			Text: "Signin",
+		})
+		@c.Container() {
+			<form
+				hx-boost="true"
+				action="/signin/"
+				method="post"
+				class="flex flex-col gap-4 px-2 w-full"
+			>
+				@c.Input(
+					c.InputProps{
+						Type:        "text",
+						Name:        "username_or_email",
+						Placeholder: "user123 or user@example.com",
+						Label:       "Username or Email",
+						Required:    true,
+					},
+				)
+				@c.Input(
+					c.InputProps{
+						Type:        "password",
+						Name:        "password",
+						Placeholder: "supersecret123",
+						Label:       "Password",
+						Required:    true,
+					},
+				)
+				@c.RequiredText()
+				@c.Submit(c.SubmitProps{
+					Text: "Signin",
+				})
+			</form>
+			@c.Nav(c.NavProps{
+				Links: []c.Link{
+					{Text: "Sign up", Url: "/signup"},
+				},
+			})
+		}
+	}
+}

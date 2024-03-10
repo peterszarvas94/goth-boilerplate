@@ -2,16 +2,29 @@ package pages
 
 import (
 	"goth/web/templates/layouts"
+	c "goth/web/templates/components"
 )
 
 templ Index() {
 	@layouts.Base(layouts.BaseProps{
-		Title: "Index",
+		Title:       "Index",
 		Description: "Welcome to the index page!",
 	}) {
 		<div class="flex flex-col gap-2">
-			<h1 class="font-bold">Index</h1>
-			<p>Welcome to the index page!</p>
+			@c.Header1(c.Header1Props{
+				Text: "Welcome",
+			})
+			@c.Container() {
+				@c.Paragraph(c.ParagraphProps{
+					Text: "\"Perfection is achieved, not when there is nothing more to add, but when there is nothing left to take away.\" ― Antoine de Saint-Exupéry, Airman's Odyssey",
+				})
+				@c.Nav(c.NavProps{
+					Links: []c.Link{
+						{Text: "Sign up", Url: "/signup"},
+						{Text: "Sign in", Url: "/signin"},
+					},
+				})
+			}
 		</div>
 	}
 }

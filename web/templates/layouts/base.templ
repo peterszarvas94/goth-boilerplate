@@ -9,10 +9,15 @@ templ Base(props BaseProps) {
 	<html lang="en">
 		<head>
 			<title>{ props.Title }</title>
-			<script src="https://unpkg.com/htmx.org@1.9.10"></script>
 			<meta name="description" content={ props.Description }/>
+
+			// htmx
+			<script src="https://unpkg.com/htmx.org@1.9.10"></script>
+
+			// tailwind generated styles
+			<link rel="stylesheet" href="/static/styles.css"/>
 		</head>
-		<body>
+		<body class="dark:bg-gray-900 dark:text-white">
 			{ children... }
 		</body>
 	</html>

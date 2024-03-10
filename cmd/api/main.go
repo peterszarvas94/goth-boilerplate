@@ -14,7 +14,10 @@ func main() {
 		panic(fmt.Sprintf("cannot create server: %s", err))
 	}
 
-	logger.Info("Server started")
+	msg := fmt.Sprintf("server started on port %s", server.Addr)
+	fmt.Println(msg)
+
+	logger.Info(msg)
 
 	err = server.ListenAndServe()
 	if err != nil {

@@ -8,11 +8,11 @@ tmp_dir = "tmp"
   delay = 1000
   exclude_dir = ["tests", "assets", "tmp", "vendor", "testdata"]
   exclude_file = []
-  exclude_regex = ["_test.go", "_templ.go"]
+  exclude_regex = ["_test.go"]
   exclude_unchanged = false
   follow_symlink = false
   full_bin = "APP_ENV=development ./tmp/main"
-  include_ext = ["go", "templ"]
+  include_ext = ["go", "css", "js"]
   include_file = []
   kill_delay = "0s"
   log = "build-errors.log"

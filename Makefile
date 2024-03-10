@@ -5,39 +5,39 @@ all: build
 
 build:
 	@echo "Building..."
-	@templ generate && go build -o ./tmp/main ./cmd/api/main.go
+	@go build -o ./tmp/main ./cmd/api/main.go
 
 # Run the application
 run:
 	@go run cmd/api/main.go
 
 # Create DB container
-docker-run:
-	@if docker compose up 2>/dev/null; then \
-		: ; \
-	else \
-		echo "Falling back to Docker Compose V1"; \
-		docker-compose up; \
-	fi
+# docker-run:
+# 	@if docker compose up 2>/dev/null; then \
+# 		: ; \
+# 	else \
+# 		echo "Falling back to Docker Compose V1"; \
+# 		docker-compose up; \
+# 	fi
 
 # Shutdown DB container
-docker-down:
-	@if docker compose down 2>/dev/null; then \
-		: ; \
-	else \
-		echo "Falling back to Docker Compose V1"; \
-		docker-compose down; \
-	fi
+# docker-down:
+# 	@if docker compose down 2>/dev/null; then \
+# 		: ; \
+# 	else \
+# 		echo "Falling back to Docker Compose V1"; \
+# 		docker-compose down; \
+# 	fi
 
 # Generate templates
 templ:
 	@echo "Generating templates..."
-	@templ generate
+	@templ generate --watch
 
 # Generate Tailwind CS
 tailwind:
 	@echo "Watching tailwind classes..."
-	@tailwindcss -i tailwind.base.css -o web/static/tailwind.css --watch
+	@tailwindcss -i tailwind.base.css -o web/static/styles.css --watch
 
 # Test the application
 test:

@@ -1,0 +1,13 @@
+package components;
+
+type Header1Props struct {
+	Text string
+}
+
+templ Header1(props Header1Props) {
+	<h1
+		class="flex justify-center text-3xl font-bold py-6"
+	>
+		{ props.Text }
+	</h1>
+}

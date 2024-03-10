@@ -9,14 +9,10 @@ import (
 )
 
 type config struct {
-	PORT             string
-	APP_ENV          string
-	DB_HOST          string
-	DB_PORT          string
-	DB_DATABASE      string
-	DB_USERNAME      string
-	DB_PASSWORD      string
-	DB_ROOT_PASSWORD string
+	PORT     string
+	APP_ENV  string
+	DB_URL   string
+	DB_TOKEN string
 }
 
 var App config

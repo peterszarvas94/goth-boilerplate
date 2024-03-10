@@ -1,0 +1,29 @@
+package pages
+
+import (
+	"goth/web/templates/layouts"
+	c "goth/web/templates/components"
+)
+
+templ Dashboard() {
+	@layouts.Base(layouts.BaseProps{
+		Title:       "Dashboard",
+		Description: "Welcome to the dashboard page!",
+	}) {
+		<div class="flex flex-col gap-2">
+			@c.Header1(c.Header1Props{
+				Text: "Dashboard",
+			})
+			@c.Container() {
+				@c.Paragraph(c.ParagraphProps{
+					Text: "\"It is a shame for a man to grow old without seeing the beauty and strength of which his body is capable.\" - Socrates",
+				})
+				@c.Nav(c.NavProps{
+					Links: []c.Link{
+						{Text: "Home", Url: "/"},
+					},
+				})
+			}
+		</div>
+	}
+}

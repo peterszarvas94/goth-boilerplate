@@ -9,26 +9,21 @@ import (
 	"goth/internal/slogger"
 	"time"
 
-	_ "github.com/go-sql-driver/mysql"
+	// _ "github.com/go-sql-driver/mysql"
+	_ "github.com/tursodatabase/libsql-client-go/libsql"
 	_ "github.com/joho/godotenv/autoload"
 )
 
 type Service interface {
-	Seed()
-	GetUsers() []schema.User
+	Seed() error
+	UserGetAll() ([]*schema.UserPropsGetAll, error)
+	UserSignup(schema.UserPropsSignup) error
+	UserSignin(schema.UserPropsSignin) (*schema.User, error)
 }
 
 type service struct {
 	db *sql.DB
 }
-
-var (
-	dbname   = config.App.DB_DATABASE
-	password = config.App.DB_PASSWORD
-	username = config.App.DB_USERNAME
-	port     = config.App.DB_PORT
-	host     = config.App.DB_HOST
-)
 
 var DB = newDb()
 
@@ -36,7 +31,9 @@ var logger = slogger.Get()
 
 func newDb() Service {
 	// Opening a driver typically will not attempt to connect to the database.
-	db, err := sql.Open("mysql", fmt.Sprintf("%s:%s@tcp(%s:%s)/%s", username, password, host, port, dbname))
+	connectionStr := fmt.Sprintf("%s?authToken=%s", config.App.DB_URL, config.App.DB_TOKEN)
+
+	db, err := sql.Open("libsql", connectionStr)
 	if err != nil {
 		// This will not be a connection error, but a DSN parse error or
 		// another initialization error.
@@ -50,70 +47,126 @@ func newDb() Service {
 	return s
 }
 
-func (s *service) Seed() {
+func (s *service) Seed() error {
 	ctx, cancel := context.WithTimeout(context.Background(), 1*time.Second)
 	defer cancel()
 
 	// DEV: drop table
 	if config.App.APP_ENV == "development" {
-		_, err := s.db.ExecContext(ctx, schema.DropUserTableSchema)
+		_, err := s.db.ExecContext(ctx, schema.UserTableSchemaDrop)
 		if err != nil {
 			logger.Fatal(fmt.Sprintf("cannot drop table: %v", err))
-			return
+			return err
 		}
 	}
 
-	_, err := s.db.ExecContext(ctx, schema.CreateUserTableSchema)
+	_, err := s.db.ExecContext(ctx, schema.UserTableSchemaCreate)
 	if err != nil {
 		logger.Fatal(fmt.Sprintf("cannot create users schema: %v", err))
-		return
+		return err
 	}
 
 	// DEV: seed table
 	if config.App.APP_ENV == "development" {
-		_, err = s.db.ExecContext(ctx, schema.CreateUserSchema,
+		_, err = s.db.ExecContext(ctx, schema.UserSchemaSignup,
 			"usr_d895753efd95444da56e2d39bfe1d13a",
-			"testuser",
-			"test@example.com",
-			"password123",
+			"a",
+			"a@a",
+			"a",
 		)
 		if err != nil {
 			logger.Fatal(fmt.Sprintf("cannot create test user: %v", err))
-			return
+			return err
 		}
 
 		logger.Info("database seeded for dev")
 	}
+
+	return nil
 }
 
-func (s *service) GetUsers() []schema.User {
+func (s *service) UserGetAll() ([]*schema.UserPropsGetAll, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 1*time.Second)
 	defer cancel()
 
-	rows, err := s.db.QueryContext(ctx, schema.GetUsersSchema)
+	rows, err := s.db.QueryContext(ctx, schema.UserSchemaGetAll)
 	if err != nil {
-		logger.Fatal(fmt.Sprintf("cannot get users: %v", err))
+		logger.Error(fmt.Sprintf("cannot get users: %v", err))
+		return nil, err
 	}
 
-	users := []schema.User{}
+	users := []*schema.UserPropsGetAll{}
 
 	defer rows.Close()
 	for rows.Next() {
-		user := schema.User{}
-			
+		user := &schema.UserPropsGetAll{}
+
 		err := rows.Scan(
-			&user.ID,
+			&user.Id,
 			&user.Username,
 			&user.Email,
-			&user.Password,
 			&user.CreatedAt,
 			&user.UpdatedAt,
 		)
 		if err != nil {
 			logger.Error(fmt.Sprintf("cannot scan users: %v", err))
+			return nil, err
 		}
 		users = append(users, user)
 	}
 
-	return users
+	return users, nil
+}
+
+func (s *service) UserSignup(props schema.UserPropsSignup) error {
+	ctx, cancel := context.WithTimeout(context.Background(), 1*time.Second)
+	defer cancel()
+
+	// TODO: hash password
+	// TODO: check if user already exists
+
+	_, err := s.db.ExecContext(ctx, schema.UserSchemaSignup,
+		props.Id,
+		props.Username,
+		props.Email,
+		props.Password,
+	)
+
+	if err != nil {
+		logger.Error(fmt.Sprintf("cannot create user: %v", err))
+		return err
+	}
+
+	logger.Info(fmt.Sprintf("user created: %s", props.Id))
+
+	return nil
+}
+
+func (s *service) UserSignin(props schema.UserPropsSignin) (*schema.User, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 1*time.Second)
+	defer cancel()
+
+	// TODO: hash password
+
+	row := s.db.QueryRowContext(ctx, schema.UserSchemaSignin,
+		props.UsernameOrEmail,
+		props.UsernameOrEmail,
+		props.Password,
+	)
+
+	user := &schema.User{}
+
+	err := row.Scan(
+		&user.Id,
+		&user.Username,
+		&user.Email,
+		&user.CreatedAt,
+		&user.UpdatedAt,
+	)
+	if err != nil {
+		logger.Error(fmt.Sprintf("cannot scan user: %v", err))
+		return nil, err
+	}
+
+	return user, nil
 }

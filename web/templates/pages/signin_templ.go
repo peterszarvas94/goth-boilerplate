@@ -15,7 +15,7 @@ import (
 	"goth/web/templates/layouts"
 )
 
-func Index() templ.Component {
+func Signin() templ.Component {
 	return templ.ComponentFunc(func(ctx context.Context, templ_7745c5c3_W io.Writer) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templ_7745c5c3_W.(*bytes.Buffer)
 		if !templ_7745c5c3_IsBuffer {
@@ -34,13 +34,13 @@ func Index() templ.Component {
 				templ_7745c5c3_Buffer = templ.GetBuffer()
 				defer templ.ReleaseBuffer(templ_7745c5c3_Buffer)
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"flex flex-col gap-2\">")
+			templ_7745c5c3_Err = c.Header1(c.Header1Props{
+				Text: "Signin",
+			}).Render(ctx, templ_7745c5c3_Buffer)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = c.Header1(c.Header1Props{
-				Text: "Welcome",
-			}).Render(ctx, templ_7745c5c3_Buffer)
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(" ")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -50,20 +50,51 @@ func Index() templ.Component {
 					templ_7745c5c3_Buffer = templ.GetBuffer()
 					defer templ.ReleaseBuffer(templ_7745c5c3_Buffer)
 				}
-				templ_7745c5c3_Err = c.Paragraph(c.ParagraphProps{
-					Text: "\"Perfection is achieved, not when there is nothing more to add, but when there is nothing left to take away.\" ― Antoine de Saint-Exupéry, Airman's Odyssey",
+				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<form hx-boost=\"true\" action=\"/signin/\" method=\"post\" class=\"flex flex-col gap-4 px-2 w-full\">")
+				if templ_7745c5c3_Err != nil {
+					return templ_7745c5c3_Err
+				}
+				templ_7745c5c3_Err = c.Input(
+					c.InputProps{
+						Type:        "text",
+						Name:        "username_or_email",
+						Placeholder: "user123 or user@example.com",
+						Label:       "Username or Email",
+						Required:    true,
+					},
+				).Render(ctx, templ_7745c5c3_Buffer)
+				if templ_7745c5c3_Err != nil {
+					return templ_7745c5c3_Err
+				}
+				templ_7745c5c3_Err = c.Input(
+					c.InputProps{
+						Type:        "password",
+						Name:        "password",
+						Placeholder: "supersecret123",
+						Label:       "Password",
+						Required:    true,
+					},
+				).Render(ctx, templ_7745c5c3_Buffer)
+				if templ_7745c5c3_Err != nil {
+					return templ_7745c5c3_Err
+				}
+				templ_7745c5c3_Err = c.RequiredText().Render(ctx, templ_7745c5c3_Buffer)
+				if templ_7745c5c3_Err != nil {
+					return templ_7745c5c3_Err
+				}
+				templ_7745c5c3_Err = c.Submit(c.SubmitProps{
+					Text: "Signin",
 				}).Render(ctx, templ_7745c5c3_Buffer)
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(" ")
+				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</form>")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
 				templ_7745c5c3_Err = c.Nav(c.NavProps{
 					Links: []c.Link{
 						{Text: "Sign up", Url: "/signup"},
-						{Text: "Sign in", Url: "/signin"},
 					},
 				}).Render(ctx, templ_7745c5c3_Buffer)
 				if templ_7745c5c3_Err != nil {
@@ -78,18 +109,14 @@ func Index() templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div>")
-			if templ_7745c5c3_Err != nil {
-				return templ_7745c5c3_Err
-			}
 			if !templ_7745c5c3_IsBuffer {
 				_, templ_7745c5c3_Err = io.Copy(templ_7745c5c3_W, templ_7745c5c3_Buffer)
 			}
 			return templ_7745c5c3_Err
 		})
 		templ_7745c5c3_Err = layouts.Base(layouts.BaseProps{
-			Title:       "Index",
-			Description: "Welcome to the index page!",
+			Title:       "Signin",
+			Description: "Sigin to the app.",
 		}).Render(templ.WithChildren(ctx, templ_7745c5c3_Var2), templ_7745c5c3_Buffer)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err

@@ -7,8 +7,8 @@ import (
 	"github.com/a-h/templ"
 )
 
-func Index(w http.ResponseWriter, r *http.Request) {
-	component := pages.Index();
+func Dashboard(w http.ResponseWriter, r *http.Request) {
+	component := pages.Dashboard();
 	handler := templ.Handler(component);
 	handler.ServeHTTP(w, r);
 }

@@ -10,17 +10,26 @@ import (
 
 var logger = slogger.Get()
 
-func GetUsersHandler(w http.ResponseWriter, r *http.Request) {
+func GetUsers(w http.ResponseWriter, r *http.Request) {
 	db, ok := r.Context().Value("db").(database.Service)
 	if !ok {
 		logger.Error("error getting db from context")
-		w.WriteHeader(http.StatusInternalServerError)
+		InternalServerError(w, r)
+		return
 	}
 
-	jsonResp, err := json.Marshal(db.GetUsers())
+	users, err := db.UserGetAll()
+	if err != nil {
+		logger.Error(fmt.Sprintf("error getting users from db. Err: %v", err))
+		InternalServerError(w, r)
+		return
+	}
 
+	jsonResp, err := json.Marshal(users)
 	if err != nil {
 		logger.Error(fmt.Sprintf("error handling JSON marshal. Err: %v", err))
+		InternalServerError(w, r)
+		return
 	}
 
 	w.Write(jsonResp)

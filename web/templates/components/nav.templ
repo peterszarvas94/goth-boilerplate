@@ -1,0 +1,21 @@
+package components
+
+type Link struct {
+	Text string
+	Url  string
+}
+
+type NavProps struct {
+	Links []Link
+}
+
+templ Nav(props NavProps) {
+	<nav>
+		<div>Navigation:</div>
+		<ul class="list-disc list-inside">
+			for _, link := range props.Links {
+				<li><a href={ templ.SafeURL(link.Url) }>{ link.Text }</a></li>
+			}
+		</ul>
+	</nav>
+}

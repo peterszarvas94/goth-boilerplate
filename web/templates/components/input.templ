@@ -1,0 +1,38 @@
+package components
+
+import "strconv"
+import "fmt"
+
+type InputProps struct {
+	Type        string
+	Name        string
+	Placeholder string
+	Label       string
+	Value       string
+	Required    bool
+}
+
+func renderRequiredStar(required bool) string {
+	if required {
+		return "*"
+	}
+	return ""
+}
+
+templ Input(props InputProps) {
+	<div class="flex flex-col gap-2">
+		<label
+			class="font-bold"
+		>
+			{ fmt.Sprintf("%s %s", props.Label, renderRequiredStar(props.Required)) }
+		</label>
+		<input
+			class="border rounded p-2 dark:bg-gray-900 dark:text-white"
+			required={ strconv.FormatBool(props.Required) }
+			type={ props.Type }
+			name={ props.Name }
+			value={ props.Value }
+			placeholder={ props.Placeholder }
+		/>
+	</div>
+}
