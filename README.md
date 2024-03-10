@@ -1,10 +1,24 @@
 # Project goth
 
-Go
+This is a minimalist but somewhat opinionated starter template for building full stack applications
 
-Templ
+Stack:
 
-HTMX
+- go
+- templ
+- htmx
+- tailwind
+- turso db
+
+## Features
+
+- sample pages
+- auth
+- go's built-in router
+- middlewares
+- json logger
+- env variable parsing
+- dark mode (free)
 
 ## Getting Started
 
@@ -27,14 +41,15 @@ run the application
 make run
 ```
 
-Create DB container
+run templ codegen
 ```bash
-make docker-run
+make templ
 ```
 
-Shutdown DB container
+run tailwind codegen
 ```bash
-make docker-down
+make tw
+
 ```
 
 live reload the application
