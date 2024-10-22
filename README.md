@@ -1,5 +1,7 @@
 # Project goth
 
+This repo is archived in favor of [goat](http://github.com/peterszarvas94/goat)
+
 This is a minimalist but somewhat opinionated starter template for building full stack applications
 
 Stack:
